@@ -1,4 +1,4 @@
 flask
 Werkzeug
+PyYAML
 serverless-wsgi>=2.0.2
-ushlex

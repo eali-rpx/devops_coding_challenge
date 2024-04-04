@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import (Flask, jsonify)
 import yaml
 
 app = Flask(__name__)
@@ -13,6 +13,3 @@ def get_resources():
         return "Resource file not found", 404
     except Exception as e:
         return str(e), 500
-
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')

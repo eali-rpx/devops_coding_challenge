@@ -1,8 +1,7 @@
-from flask import (Flask, jsonify)
+from flask import Flask, jsonify
 import yaml
-from flask_lambda import FlaskLambda
 
-app = FlaskLambda(__name__)
+app = Flask(__name__)
 
 @app.route('/api/resources', methods=['GET'])
 def get_resources():
@@ -14,3 +13,6 @@ def get_resources():
         return "Resource file not found", 404
     except Exception as e:
         return str(e), 500
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0')

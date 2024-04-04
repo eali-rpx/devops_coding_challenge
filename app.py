@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from urllib.parse import quote as url_quote
 import yaml
 
 app = Flask(__name__)

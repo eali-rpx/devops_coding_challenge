@@ -1,4 +1,4 @@
 Flask==2.0.1
 PyYAML==6.0
-Werkzeug
+werkzeug==2.3.0
 serverless-wsgi>=2.0.2

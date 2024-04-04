@@ -5,4 +5,4 @@ COPY requirements.txt requirements.txt
 COPY data/ .
 COPY *.py . 
 RUN python3 -m pip install -r requirements.txt
-CMD ["gunicorn", "-b=:8080", "-w=1", "app:app"]
+CMD ["app.handler"]

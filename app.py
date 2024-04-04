@@ -1,8 +1,5 @@
-import yaml
 from flask import (Flask, jsonify)
-from werkzeug.exceptions import abort
-
-
+import yaml
 
 app = Flask(__name__)
 

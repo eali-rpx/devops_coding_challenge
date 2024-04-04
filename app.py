@@ -1,24 +1,16 @@
-import json
+from fastapi import FastAPI
+from typing import Dict, Any
 import yaml
 
-def lambda_handler(event, context):
-    # Check if the HTTP method is GET
-    if event["httpMethod"] != "GET":
-        return {
-            'statusCode': 405,  # Method Not Allowed
-            'body': json.dumps({'error': 'Method not allowed'})
-        }
-    
+app = FastAPI()
+
+@app.get("/api/resources")
+def get_resources() -> Dict[str, Any]:
     try:
         with open('data/ebbcarbon.yaml', 'r') as file:
             resources = yaml.safe_load(file)
-        return {
-            'statusCode': 200,
-            'body': json.dumps(resources)
-        }
+        return {"statusCode": 200, "body": resources}
+    except FileNotFoundError:
+        return {"statusCode": 404, "body": "Resource file not found"}
     except Exception as e:
-        return {
-            'statusCode': 500,
-            'body': json.dumps({'error': str(e)})
-        }
-
+        return {"statusCode": 500, "body": str(e)}

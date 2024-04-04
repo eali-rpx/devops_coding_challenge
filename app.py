@@ -1,19 +1,24 @@
-from flask import Flask, jsonify
-from urllib.parse import quote as url_quote
+import json
 import yaml
 
-app = Flask(__name__)
-
-@app.route('/api/resources', methods=['GET'])
-def get_resources():
+def lambda_handler(event, context):
+    # Check if the HTTP method is GET
+    if event["httpMethod"] != "GET":
+        return {
+            'statusCode': 405,  # Method Not Allowed
+            'body': json.dumps({'error': 'Method not allowed'})
+        }
+    
     try:
         with open('data/ebbcarbon.yaml', 'r') as file:
             resources = yaml.safe_load(file)
-        return jsonify(resources), 200
-    except FileNotFoundError:
-        return "Resource file not found", 404
+        return {
+            'statusCode': 200,
+            'body': json.dumps(resources)
+        }
     except Exception as e:
-        return str(e), 500
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': str(e)})
+        }
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')

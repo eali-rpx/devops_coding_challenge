@@ -8,4 +8,4 @@ RUN python3 -m pip install -r requirements.txt
 
 COPY . .
 
-CMD ["lambda_function.handler"]
+CMD ["lambda_function.handler_function"]

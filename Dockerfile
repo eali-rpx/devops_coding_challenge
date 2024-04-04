@@ -1,5 +1,5 @@
-FROM public.ecr.aws/lambda/python:3.12
-WORKDIR /
+FROM public.ecr.aws/lambda/python:3.11
+
 COPY requirements.txt requirements.txt
 COPY data/ .
 COPY *.py . 

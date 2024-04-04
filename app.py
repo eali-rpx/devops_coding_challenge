@@ -16,6 +16,3 @@ def get_resources():
         return "Resource file not found", 404
     except Exception as e:
         return str(e), 500
-    
-if __name__ == '__main__':
-    app.run(debug=True)

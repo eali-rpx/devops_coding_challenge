@@ -1,7 +1,10 @@
 import json
 import yaml
+import numpy
+
 
 def lambda_handler(event, context):
+    print(numpy.__version__)
     with open('data/ebbcarbon.yaml', 'r') as file:
         resources = yaml.safe_load(file)
     

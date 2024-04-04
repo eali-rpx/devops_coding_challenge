@@ -1,7 +1,8 @@
 from flask import (Flask, jsonify)
 import yaml
+from flask_lambda import FlaskLambda
 
-app = Flask(__name__)
+app = FlaskLambda(__name__)
 
 @app.route('/api/resources', methods=['GET'])
 def get_resources():

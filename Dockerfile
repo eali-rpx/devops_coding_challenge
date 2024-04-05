@@ -1,7 +1,24 @@
+# Use the official Python image
 FROM public.ecr.aws/docker/library/python:3.12-slim
 
+# Set the working directory in the container
 WORKDIR /app
-COPY requirements.txt ./
-RUN python3 -m pip install -r requirements.txt
-COPY *.py ./
+
+# Copy the dependencies file to the working directory
+COPY requirements.txt .
+
+# Install Flask and other dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code to the working directory
+COPY . .
+
+# Expose port 5000 to the outside world
+EXPOSE 5000
+
+# Define environment variable
+ENV FLASK_APP=app.py
+
+# Command to run the Flask application
+# CMD ["flask", "run", "--host=0.0.0.0"]
 CMD ["app.handler"]

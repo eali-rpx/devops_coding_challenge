@@ -1,11 +1,23 @@
-import awsgi
 from flask import Flask
+import yaml
 
-app = Flask(__name__)
+def create_app(config=None):
+    """Return app configuration."""
 
-@app.route('/api/resources', methods=['GET'])
-def get_resources():
-    return "Hi EBBCARBOON", 200
+    app = Flask(__name__)
+    app.config.from_object(config)
 
-def lambda_handler(event, context):
-    return awsgi.response(app, event, context, base64_content_types={"image/png"})
+    @app.route("/api/resources")
+    def get_resources():
+        with open("data/ebbcarbon.yaml", "r", encoding="UTF-8") as endpoint_data:
+            try:
+                company_data = yaml.safe_load(endpoint_data)
+            except yaml.YAMLError:
+                return "Server Error", 500
+
+        return company_data["resources"]
+
+    return app
+
+if __name__ == '__main__':
+    app.run(debug=True)

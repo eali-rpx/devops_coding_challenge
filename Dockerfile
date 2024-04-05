@@ -1,5 +1,4 @@
 FROM public.ecr.aws/lambda/python:3.11
-COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.8.1 /lambda-adapter /opt/extensions/lambda-adapter
 
 COPY requirements.txt .
 COPY *.py .

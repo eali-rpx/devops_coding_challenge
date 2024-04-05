@@ -1,23 +1,23 @@
-from flask import Flask
 import yaml
+from flask import Flask, request, jsonify
 
-def create_app(config=None):
-    """Return app configuration."""
+app = Flask(__name__)
 
-    app = Flask(__name__)
-    app.config.from_object(config)
+def get_yaml_data(filename):
+    with open(filename, "r") as f:
+        data = yaml.safe_load(f)
+    return data
 
-    @app.route("/api/resources")
-    def get_resources():
-        with open("data/ebbcarbon.yaml", "r", encoding="UTF-8") as endpoint_data:
-            try:
-                company_data = yaml.safe_load(endpoint_data)
-            except yaml.YAMLError:
-                return "Server Error", 500
-
-        return company_data["resources"]
-
-    return app
+@app.route('/api/resources', methods=['GET'])
+def get_resources():
+    # Get the data from the YAML file
+    data = get_yaml_data("data/ebbcarbon.yaml")
+    
+    # Extract the "resources" part
+    resources = data.get("resources")
+    
+    # Return response
+    return jsonify(resources), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

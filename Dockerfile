@@ -5,5 +5,6 @@ COPY requirements.txt .
 COPY *.py .
 COPY data/ .
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
+RUN python3 -m pip install aws-wsgi 
 # CMD ["gunicorn", "-b=:8080", "-w=1", "app:app", "app.lambda_handler"]
 CMD ["app.handler"]

@@ -1,14 +1,11 @@
-import serverless_wsgi
+import awsgi
 from flask import Flask
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/api/resources', methods=['GET'])
 def get_resources():
     return "Hi EBBCARBOON", 200
 
-def handler(event, context):
-    return serverless_wsgi.handle_request(app, event, context)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+def lambda_handler(event, context):
+    return awsgi.response(app, event, context, base64_content_types={"image/png"})

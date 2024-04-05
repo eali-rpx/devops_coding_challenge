@@ -1,6 +1,8 @@
 # Use the official Python image
 FROM public.ecr.aws/docker/library/python:3.12-slim
 
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.8.1 /lambda-adapter /opt/extensions/lambda-adapter
+
 # Set the working directory in the container
 WORKDIR /app
 
@@ -13,12 +15,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code to the working directory
 COPY . .
 
-# Expose port 5000 to the outside world
-EXPOSE 5000
-
-# Define environment variable
-ENV FLASK_APP=app.py
+# # Define environment variable
+# ENV FLASK_APP=app.py
 
 # Command to run the Flask application
 # CMD ["flask", "run", "--host=0.0.0.0"]
-CMD ["app.handler"]
+# CMD ["app.handler"]
+CMD ["gunicorn", "-b=:8080", "-w=1", "app:app"]

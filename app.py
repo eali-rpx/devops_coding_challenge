@@ -1,8 +1,7 @@
 from flask import Flask
 import yaml
 
-def create_app(config=None):
-    """Return app configuration."""
+def app(config=None):
 
     app = Flask(__name__)
     app.config.from_object(config)
@@ -20,4 +19,4 @@ def create_app(config=None):
     return app
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app().run(debug=True)

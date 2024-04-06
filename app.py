@@ -1,22 +1,16 @@
-from flask import Flask
+from flask import Flask, jsonify
 import yaml
 
+app = Flask(__name__)
 
-def app(config=None):
-    app = Flask(__name__)
-    app.config.from_object(config)
+@app.route('/api/resources', methods=['GET'])
+def get_resources():
+    try:
+        with open('data/ebbcarbon.yaml', 'r') as file:
+            resources = yaml.safe_load(file)
+        return jsonify({'resources': resources})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
-    @app.route("/api/resources")
-    def get_resources():
-        with open("data/ebbcarbon.yaml", "r", encoding="UTF-8") as endpoint_data:
-            try:
-                company_data = yaml.safe_load(endpoint_data)
-            except yaml.YAMLError:
-                return "Server Error", 500
-
-        return company_data["resources"]
-
-    return app
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -1,20 +1,18 @@
 from flask import Flask, jsonify
 import yaml
+from yaml.loader import SafeLoader
 
 app = Flask(__name__)
 
 @app.route('/api/resources', methods=['GET'])
-def get_resources():
-    try:
-        with open('data/ebbcarbon.yaml', 'r') as file:
-            resources = yaml.safe_load(file)
-        return jsonify({'resources': resources})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+def app(filename):
+    with open(f'data/{filename}.yaml','r') as f:
+        output = yaml.safe_load(f)
+    
+    # Check if 'resources' key exists in the YAML data
+    if 'resources' in output:
+        print(output['resources'])
+    else:
+        print("'resources' key not found in the YAML file.")
 
-def lambda_handler(event, context):
-    # This function will be the entry point for AWS Lambda
-    return app(event, context)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+app('ebbcarbon')

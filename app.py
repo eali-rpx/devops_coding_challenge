@@ -1,14 +1,17 @@
 import yaml
-from flask import Flask, request, jsonify
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
+from typing import Union
 
-app = Flask(__name__)
+app = FastAPI()
+handler = Mangum(app)
 
 def get_yaml_data(filename):
     with open(filename, "r") as f:
         data = yaml.safe_load(f)
     return data
 
-@app.route('/api/resources', methods=['GET'])
+@app.get('/api/resources')
 def get_resources():
     # Get the data from the YAML file
     data = get_yaml_data("data/ebbcarbon.yaml")
@@ -17,7 +20,8 @@ def get_resources():
     resources = data.get("resources")
     
     # Return response
-    return jsonify(resources), 200
+    return JSONResponse(content=resources)
 
 if __name__ == "__main__":
-    app.run(app, host="0.0.0.0", port=8080)
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8080)

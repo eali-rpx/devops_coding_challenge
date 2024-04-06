@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/python:3.12.1-slim
+FROM public.ecr.aws/lambda/python:3.10
 
 COPY . ${LAMBDA_TASK_ROOT}
 COPY requirements.txt .

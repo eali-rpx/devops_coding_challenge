@@ -1,24 +1,23 @@
-from typing import Union
-from fastapi import FastAPI
-from mangum import Mangum
-from fastapi.responses import JSONResponse
-import uvicorn
-from typing import Union
+import yaml
+from flask import Flask, request, jsonify
 
-app = FastAPI()
-handler = Mangum(app)
+app = Flask(__name__)
 
-@app.get("/")
-def read_root():
-   return {"Welcome to": "My first FastAPI depolyment using Docker image"}
+def get_yaml_data(filename):
+    with open(filename, "r") as f:
+        data = yaml.safe_load(f)
+    return data
 
-@app.get("/{text}")
-def read_item(text: str):
-   return JSONResponse({"result": text})
+@app.route('/api/resources', methods=['GET'])
+def get_resources():
+    # Get the data from the YAML file
+    data = get_yaml_data("data/ebbcarbon.yaml")
+    
+    # Extract the "resources" part
+    resources = data.get("resources")
+    
+    # Return response
+    return jsonify(resources), 200
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-   return JSONResponse({"item_id": item_id, "q": q})
-
-if __name__ == "__main__":
-   uvicorn.run(app, host="0.0.0.0", port=8080)
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -1,16 +1,24 @@
-import awsgi
-from flask import (
-    Flask,
-    jsonify,
-)
+from typing import Union
+from fastapi import FastAPI
+from mangum import Mangum
+from fastapi.responses import JSONResponse
+import uvicorn
+from typing import Union
 
-app = Flask(__name__)
+app = FastAPI()
+handler = Mangum(app)
 
+@app.get("/")
+def read_root():
+   return {"Welcome to": "My first FastAPI depolyment using Docker image"}
 
-@app.route('/')
-def index():
-    return jsonify(status=200, message='OK')
+@app.get("/{text}")
+def read_item(text: str):
+   return JSONResponse({"result": text})
 
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: Union[str, None] = None):
+   return JSONResponse({"item_id": item_id, "q": q})
 
-def lambda_handler(event, context):
-    return awsgi.response(app, event, context, base64_content_types={"image/png"})
+if __name__ == "__main__":
+   uvicorn.run(app, host="0.0.0.0", port=8080)

@@ -1,27 +1,38 @@
-import yaml
-from fastapi import FastAPI
-from fastapi.responses import JSONResponse
 from typing import Union
+from fastapi import FastAPI, Request
+from mangum import Mangum
+from fastapi.responses import JSONResponse
+import uvicorn
+from typing import Union
+import yaml
 
 app = FastAPI()
 handler = Mangum(app)
 
-def get_yaml_data(filename):
-    with open(filename, "r") as f:
-        data = yaml.safe_load(f)
-    return data
+@app.get("/")
+def read_root():
+   return {"Welcome to": "My first FastAPI depolyment using Docker image"}
 
-@app.get('/')
-def get_resources():
-    # Get the data from the YAML file
-    data = get_yaml_data("data/ebbcarbon.yaml")
-    
-    # Extract the "resources" part
-    resources = data.get("resources")
-    
-    # Return response
-    return JSONResponse(content=resources)
+@app.get("/api/resources")
+def read_root():
+   return {"Api-Resources"}
+
+@app.get("/api/resources")
+async def read_resources(request: Request):
+    # Read the YAML file contents
+    with open("data/ebbcarbon.yaml", "r") as yaml_file:
+        data = yaml.safe_load(yaml_file)
+
+    # Return the resources
+    return JSONResponse({"result": data})
+
+@app.get("/{text}")
+def read_item(text: str):
+   return JSONResponse({"result": text})
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: Union[str, None] = None):
+   return JSONResponse({"item_id": item_id, "q": q})
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+   uvicorn.run(app, host="0.0.0.0", port=8080)

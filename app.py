@@ -11,7 +11,7 @@ def get_yaml_data(filename):
         data = yaml.safe_load(f)
     return data
 
-@app.get('/api/resources')
+@app.get('/')
 def get_resources():
     # Get the data from the YAML file
     data = get_yaml_data("data/ebbcarbon.yaml")

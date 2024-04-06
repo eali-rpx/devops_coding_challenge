@@ -12,5 +12,9 @@ def get_resources():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+def lambda_handler(event, context):
+    # This function will be the entry point for AWS Lambda
+    return app(event, context)
+
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,23 +1,16 @@
-import yaml
-from flask import Flask, request, jsonify
+import awsgi
+from flask import (
+    Flask,
+    jsonify,
+)
 
 app = Flask(__name__)
 
-def get_yaml_data(filename):
-    with open(filename, "r") as f:
-        data = yaml.safe_load(f)
-    return data
 
-@app.route('/api/resources', methods=['GET'])
-def get_resources():
-    # Get the data from the YAML file
-    data = get_yaml_data("data/ebbcarbon.yaml")
-    
-    # Extract the "resources" part
-    resources = data.get("resources")
-    
-    # Return response
-    return jsonify(resources), 200
+@app.route('/')
+def index():
+    return jsonify(status=200, message='OK')
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
+def lambda_handler(event, context):
+    return awsgi.response(app, event, context, base64_content_types={"image/png"})

@@ -16,5 +16,4 @@ def app(filename):
     else:
         print("'resources' key not found in the YAML file.")
 
-def handler(event, context):
-    return awsgi.response(app, event, context)
+handler=awsgi(app=app)

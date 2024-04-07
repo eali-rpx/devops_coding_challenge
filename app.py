@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 import yaml
 from yaml.loader import SafeLoader
+from mangum import Mangum
 
 app = Flask(__name__)
 
@@ -15,4 +16,4 @@ def app(filename):
     else:
         print("'resources' key not found in the YAML file.")
 
-app('ebbcarbon')
+handler = Mangum(app=app)

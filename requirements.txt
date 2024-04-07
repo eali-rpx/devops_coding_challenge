@@ -1,4 +1,2 @@
-aws-wsgi
 flask
 pyyaml
-flask-lambda

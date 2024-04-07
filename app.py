@@ -1,9 +1,8 @@
 from flask import Flask, jsonify
 import yaml
 from yaml.loader import SafeLoader
-from flask_lambda import FlaskLambda
 
-app = FlaskLambda(__name__)
+app = Flask(__name__)
 
 @app.route('/api/resources', methods=['GET'])
 def app(filename):
@@ -16,5 +15,4 @@ def app(filename):
     else:
         print("'resources' key not found in the YAML file.")
 
-if __name__ == '__main__':
-    app.run(debug=True)
+handler=app('ebbcarbon')

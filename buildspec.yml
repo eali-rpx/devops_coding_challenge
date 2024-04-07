@@ -15,7 +15,7 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - docker build -t $ECR_IMAGE_URI:$CODEBUILD_BUILD_NUMBER .
+      - docker buildx build --platform linux/amd64 -t $ECR_IMAGE_URI:$CODEBUILD_BUILD_NUMBER .
       - docker push $ECR_IMAGE_URI:$CODEBUILD_BUILD_NUMBER
       - docker tag $ECR_IMAGE_URI:$CODEBUILD_BUILD_NUMBER $ECR_IMAGE_URI:latest
       - docker push $ECR_IMAGE_URI:latest

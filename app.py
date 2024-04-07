@@ -1,19 +1,27 @@
-from flask import Flask, jsonify
+from fastapi import FastAPI
+from mangum import Mangum
 import yaml
+import logging
 
-app = Flask(__name__)
+# API Application object
+app = FastAPI()
 
-@app.route('/api/resources', methods=['GET'])
+file_path = 'data/ebbcarbon.yaml'
+
+@app.get('/resources')
 def get_resources():
-    try:
-        with open('data/ebbcarbon.yaml', 'r') as f:
-            data = yaml.safe_load(f)
-            resources = data.get('resources', [])
-            return jsonify(resources)
-    except FileNotFoundError:
-        return jsonify({'error': 'File not found'}), 404
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    with open(file_path, 'r') as stream:
+        try:
+            data = yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            logging.error(exc)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    return data['resources']
+
+handler = Mangum(app=app)
+
+# Self contained application
+if __name__ == "__main__":
+    # Run with uvicorn: uvicorn main:app --reload
+    import uvicorn
+    uvicorn.run("app:app", host="0.0.0.0", port=8080, log_level="info", reload=True)
